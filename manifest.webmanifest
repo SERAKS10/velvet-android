@@ -1,0 +1,20 @@
+{
+  "id": "./",
+  "name": "Velvet \u2014 Your Personal Space",
+  "short_name": "Velvet",
+  "description": "A personalised Android-inspired phone experience.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "orientation": "portrait",
+  "background_color": "#171522",
+  "theme_color": "#171522",
+  "icons": [
+    {
+      "src": "icons/velvet.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any"
+    }
+  ]
+}
