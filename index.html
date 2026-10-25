@@ -1,165 +1,36 @@
-<!doctype html>
-<html lang="en">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#171522">
-<meta name="description" content="Velvet — your personal, Android-inspired phone experience.">
-<link rel="manifest" href="manifest.webmanifest">
-<link rel="icon" href="icons/velvet.svg" type="image/svg+xml">
-<meta name="mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-capable" content="yes">
-<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-<meta name="apple-mobile-web-app-title" content="Velvet">
-<title>Velvet — Personal Phone</title>
-<style>
-:root{--bg:#171522;--panel:#242132;--panel2:#302b42;--text:#fbf7ff;--muted:#b9b1ca;--accent:#d7a8ff;--accent2:#a8e6d5;--line:#ffffff18}
-*{box-sizing:border-box} html,body{margin:0;width:100%;height:100%;font-family:Inter,ui-rounded,"Segoe UI",system-ui,sans-serif;background:#0d0c12;color:var(--text)}
-body{display:grid;place-items:center;overflow:hidden}
-button,input,textarea{font:inherit}
-button{color:inherit;border:0;cursor:pointer}
-.stage{width:100%;height:100%;display:grid;place-items:center;padding:14px}
-.phone{position:relative;width:min(100%,410px);height:min(880px,100%);min-height:560px;border:1px solid #ffffff26;border-radius:38px;overflow:hidden;background:var(--bg);box-shadow:0 30px 100px #0009;isolation:isolate}
-.wallpaper{position:absolute;inset:0;background:radial-gradient(ellipse at 18% 15%,#8d5fb766 0,transparent 38%),radial-gradient(ellipse at 90% 65%,#367d7966 0,transparent 34%),linear-gradient(150deg,#1b1729,#29233b 52%,#121923);z-index:-2}
-.wallpaper:before,.wallpaper:after{content:"";position:absolute;border:1px solid #ffffff12;border-radius:50%;width:340px;height:340px;left:-155px;bottom:80px;box-shadow:0 0 0 35px #ffffff04,0 0 0 70px #ffffff03}
-.wallpaper:after{left:auto;bottom:auto;right:-190px;top:100px;width:390px;height:390px}
-.status{height:42px;padding:13px 24px 0;display:flex;justify-content:space-between;align-items:center;font-size:12px;font-weight:700;letter-spacing:.2px}
-.status .signals{display:flex;gap:7px;align-items:center}.dot{width:5px;height:5px;border-radius:50%;background:currentColor}
-.screen{position:absolute;inset:42px 0 0;display:flex;flex-direction:column;transition:transform .42s cubic-bezier(.2,.8,.2,1),opacity .3s}
-.lock{align-items:center;text-align:center;padding:48px 25px 24px;touch-action:pan-y}
-.eyebrow{font-size:11px;letter-spacing:2.4px;text-transform:uppercase;color:var(--accent2);font-weight:800}
-.clock{font-size:clamp(70px,19vw,94px);line-height:1;letter-spacing:-6px;font-weight:250;margin:17px 0 8px}
-.date{font-size:15px;color:#e8def5}.lock-note{margin-top:auto;width:100%;background:#ffffff0d;border:1px solid #ffffff19;border-radius:23px;padding:17px;text-align:left;backdrop-filter:blur(15px)}
-.note-head{display:flex;justify-content:space-between;color:var(--muted);font-size:12px;margin-bottom:8px}.lock-note strong{font-size:14px}.lock-note p{font-size:12px;line-height:1.5;color:#d0c8de;margin:6px 0 0}
-.unlock{margin:25px 0 4px;display:flex;flex-direction:column;align-items:center;gap:10px;color:#eee4fb;font-size:12px;letter-spacing:.4px}
-.swipe-pill{width:44px;height:44px;border-radius:50%;display:grid;place-items:center;background:#ffffff19;border:1px solid #ffffff26;animation:bob 1.6s infinite}
-@keyframes bob{50%{transform:translateY(-5px)}}
-.home{padding:12px 21px 23px;opacity:0;transform:translateY(35px);pointer-events:none}
-.home.active{opacity:1;transform:none;pointer-events:auto}
-.topline{display:flex;align-items:center;justify-content:space-between;margin:5px 0 22px}
-.greeting small{display:block;color:var(--muted);font-size:12px;margin-bottom:3px}.greeting strong{font-size:23px;font-weight:650;letter-spacing:-.6px}
-.avatar{width:42px;height:42px;border-radius:15px;background:linear-gradient(140deg,#d7a8ff,#a8e6d5);color:#241b32;display:grid;place-items:center;font-weight:900}
-.widget{border:1px solid #ffffff19;background:#ffffff0d;border-radius:24px;padding:17px 18px;backdrop-filter:blur(18px)}
-.widget-top{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:12px}.weather-icon{font-size:27px}
-.widget .big{font-size:31px;letter-spacing:-1px;margin:8px 0 1px}.widget .sub{font-size:12px;color:var(--muted)}
-.widget-bottom{display:flex;gap:17px;margin-top:17px;padding-top:13px;border-top:1px solid var(--line);font-size:11px;color:#d4cce1}
-.section-title{display:flex;justify-content:space-between;align-items:center;margin:23px 2px 12px}.section-title strong{font-size:14px}.section-title span{font-size:11px;color:var(--muted)}
-.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:19px 8px}
-.app{display:flex;align-items:center;flex-direction:column;gap:8px;background:transparent;padding:0;min-width:0}
-.app-icon{width:57px;height:57px;border-radius:19px;display:grid;place-items:center;font-size:25px;box-shadow:inset 0 1px 0 #ffffff42,0 7px 16px #0002;transition:transform .15s}
-.app:active .app-icon{transform:scale(.92)}.app-label{font-size:10px;color:#f0eaf7}
-.lilac{background:linear-gradient(145deg,#e0baff,#9d78ca);color:#2c1c3c}.mint{background:linear-gradient(145deg,#c2f6e6,#5ba99c);color:#163d3a}.peach{background:linear-gradient(145deg,#ffd1bd,#c77e78);color:#51272b}.blue{background:linear-gradient(145deg,#c4d7ff,#6688c6);color:#1b2e56}.gold{background:linear-gradient(145deg,#ffe6a5,#d6a14c);color:#55360c}.rose{background:linear-gradient(145deg,#ffc8df,#c66f9e);color:#51203c}
-.dock{display:grid;grid-template-columns:repeat(4,1fr);gap:10px;margin-top:auto;padding:12px;background:#ffffff13;border:1px solid #ffffff1b;border-radius:25px;backdrop-filter:blur(20px)}
-.dock .app-icon{width:51px;height:51px;border-radius:17px}.dock .app-label{display:none}
-.navbar{position:absolute;bottom:7px;left:50%;transform:translateX(-50%);width:108px;height:4px;border-radius:8px;background:#fff9;z-index:5;cursor:pointer}
-.app-view{position:absolute;inset:42px 0 0;background:#f7f2ff;color:#292137;z-index:4;display:none;flex-direction:column;padding:22px 20px 28px;overflow:auto}
-.app-view.open{display:flex;animation:appIn .22s ease-out}@keyframes appIn{from{opacity:0;transform:translateY(10px)}to{opacity:1;transform:none}}
-.appbar{display:flex;align-items:center;gap:12px;margin-bottom:24px}.back{width:38px;height:38px;border-radius:14px;background:#e9dff7;color:#3d2d55;font-size:20px}.appbar h2{font-size:22px;letter-spacing:-.6px;margin:0}.appbar small{display:block;color:#857791;font-size:11px;margin-top:2px}
-.app-view textarea{width:100%;min-height:230px;resize:vertical;border:1px solid #e4d9f0;border-radius:18px;background:#fff;padding:16px;color:#292137;outline:none;line-height:1.6}
-.save{margin-top:12px;padding:13px;border-radius:15px;background:#4d3a68;color:white;font-weight:700}
-.photo-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px}.photo{min-height:140px;border-radius:19px;padding:14px;display:flex;align-items:end;font-size:12px;font-weight:700;color:white;background:linear-gradient(145deg,#b7d9ce,#547d8b)}.photo:nth-child(2){background:linear-gradient(145deg,#f1c6ad,#a85c77)}.photo:nth-child(3){background:linear-gradient(145deg,#bdb3ec,#5e4e87)}.photo:nth-child(4){background:linear-gradient(145deg,#e5d9a8,#9e8950)}
-.quicklink{display:flex;gap:12px;align-items:center;padding:15px;border-radius:16px;background:white;margin:7px 0;text-decoration:none;color:#30263e;border:1px solid #eee6f6}.quicklink b{font-size:14px}.quicklink small{display:block;color:#8c7f99;margin-top:3px}
-.searchbox{display:flex;gap:8px;margin-bottom:15px}.searchbox input{min-width:0;flex:1;border:1px solid #e3d7f0;border-radius:14px;padding:12px;background:white;color:#30263e}.searchbox button{border-radius:14px;background:#4d3a68;padding:0 15px}
-.settings-row{padding:15px 0;border-bottom:1px solid #e8dff0;display:flex;justify-content:space-between;gap:15px;font-size:14px}.settings-row span{color:#857791}
-.toast{position:absolute;z-index:8;left:50%;bottom:31px;transform:translate(-50%,20px);opacity:0;background:#f8f0ff;color:#30263e;padding:11px 16px;border-radius:15px;font-size:12px;white-space:nowrap;transition:.2s;pointer-events:none}.toast.show{opacity:1;transform:translate(-50%,0)}
-@media(min-width:600px){.phone{height:min(880px,calc(100vh - 28px))}} 
-@media(max-height:680px){.lock{padding-top:25px}.clock{font-size:68px}.lock-note{padding:12px}.home{padding-top:5px}.topline{margin-bottom:12px}.widget{padding:12px 15px}.section-title{margin-top:15px}.apps{gap:12px 8px}.app-icon{width:49px;height:49px;border-radius:16px}}
-</style>
-</head>
-<body>
-<div class="stage"><main class="phone" aria-label="Velvet personal phone simulation">
-  <div class="wallpaper"></div>
-  <div class="status"><span id="statusTime">09:41</span><span class="signals"><span>◔</span><span>▮▮▮</span><span>▰</span></span></div>
-  <section class="screen lock" id="lockScreen">
-    <div class="eyebrow">your little corner</div>
-    <div class="clock" id="clock">09:41</div>
-    <div class="date" id="date">Sunday, 25 October</div>
-    <div class="lock-note">
-      <div class="note-head"><span>✦ YOUR DAILY NOTE</span><span>NOW</span></div>
-      <strong>A gentle reminder</strong>
-      <p>You don't have to have it all figured out. Just take the next step. 🌱</p>
-    </div>
-    <button class="unlock" id="unlockBtn" aria-label="Unlock phone"><span class="swipe-pill">⌃</span><span>Swipe up to open</span></button>
-  </section>
-  <section class="screen home" id="homeScreen">
-    <div class="topline"><div class="greeting"><small id="hello">GOOD AFTERNOON</small><strong>Your space.</strong></div><div class="avatar">V.</div></div>
-    <div class="widget">
-      <div class="widget-top"><span>✦ SUNDAY RESET</span><span class="weather-icon">☼</span></div>
-      <div class="big" id="homeDate">25 <span style="font-size:17px;letter-spacing:0">OCT</span></div>
-      <div class="sub" id="dayLine">Make room for what matters.</div>
-      <div class="widget-bottom"><span>◷ <b id="miniTime">09:41</b></span><span>✧ Take it one thing at a time</span></div>
-    </div>
-    <div class="section-title"><strong>Your apps</strong><span>MADE FOR YOU</span></div>
-    <div class="apps">
-      <button class="app" data-app="notes"><span class="app-icon lilac">✎</span><span class="app-label">Notes</span></button>
-      <button class="app" data-app="photos"><span class="app-icon peach">▧</span><span class="app-label">Gallery</span></button>
-      <button class="app" data-app="browser"><span class="app-icon mint">◎</span><span class="app-label">Explore</span></button>
-      <button class="app" data-app="music"><span class="app-icon rose">♫</span><span class="app-label">Music</span></button>
-      <button class="app" data-app="calendar"><span class="app-icon gold">▦</span><span class="app-label">Calendar</span></button>
-      <button class="app" data-app="focus"><span class="app-icon blue">◉</span><span class="app-label">Focus</span></button>
-      <button class="app" data-app="links"><span class="app-icon mint">↗</span><span class="app-label">Shortcuts</span></button>
-      <button class="app" data-app="settings"><span class="app-icon lilac">⚙</span><span class="app-label">Settings</span></button>
-    </div>
-    <div class="dock">
-      <button class="app" data-app="phone"><span class="app-icon mint">⌕</span><span class="app-label">Search</span></button>
-      <button class="app" data-app="notes"><span class="app-icon peach">✎</span><span class="app-label">Notes</span></button>
-      <button class="app" data-app="photos"><span class="app-icon lilac">▧</span><span class="app-label">Gallery</span></button>
-      <button class="app" data-app="browser"><span class="app-icon blue">◎</span><span class="app-label">Explore</span></button>
-    </div>
-  </section>
-  <section class="app-view" id="appView" aria-live="polite"></section>
-  <button class="navbar" id="navBar" aria-label="Return home"></button>
-  <div class="toast" id="toast"></div>
-</main></div>
+<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#17121e"><title>Velvet</title><link rel="manifest" href="manifest.webmanifest"><style>
+:root{--bg:#171522;--panel:#282238;--pink:#d7a8ff;--mint:#a8e6d5;--txt:#fbf7ff;--muted:#c5bad5}*{box-sizing:border-box}body{margin:0;background:radial-gradient(ellipse at top,#4b3157,#171522 55%,#0d0c12);color:var(--txt);font:15px/1.5 system-ui,sans-serif}.wrap{max-width:650px;margin:auto;padding:16px}.hero{min-height:260px;border-radius:24px;padding:24px;display:flex;flex-direction:column;justify-content:end;background:linear-gradient(0deg,#171522f2,transparent),url('assets/lockscreen/graduation-photo.jpg') center/cover,linear-gradient(135deg,#7c5789,#263e54);border:1px solid #ffffff2b}.clock{font-size:60px;font-weight:250;line-height:1}.muted,small{color:var(--muted)}.apps{display:grid;grid-template-columns:repeat(4,1fr);gap:9px;margin:14px 0}.apps button,.btn{border:1px solid #ffffff20;background:#ffffff12;color:var(--txt);border-radius:15px;padding:12px;cursor:pointer}.apps button{min-height:76px}.apps span{display:block;font-size:24px}.card{background:#ffffff0d;border:1px solid #ffffff20;border-radius:18px;padding:15px;margin:10px 0}.view{display:none}.view.on{display:block}.head{display:flex;align-items:center;justify-content:space-between;gap:8px}.back{border:0;background:transparent;color:var(--pink);padding:8px 0;cursor:pointer}.btn{background:var(--pink);color:#281b38;font-weight:700}.btn.secondary{background:#ffffff13;color:var(--txt)}input,textarea,select{width:100%;padding:11px;border-radius:12px;border:1px solid #ded1eb;margin:5px 0 10px;font:inherit}textarea{min-height:100px}.entry{padding:12px;border-radius:14px;background:#ffffff0d;margin:8px 0;white-space:pre-wrap}.entry .btn{margin:6px 5px 0 0;padding:7px 10px;font-size:12px}.grid2{display:grid;grid-template-columns:1fr 1fr;gap:8px}.media{width:100%;aspect-ratio:1;object-fit:cover;border-radius:12px;background:#33263c}.gallery{display:grid;grid-template-columns:1fr 1fr;gap:9px}.tile{background:#ffffff0d;padding:8px;border-radius:14px;overflow:hidden}.tile small{display:block;overflow-wrap:anywhere}.month{font-weight:700}.footer{text-align:center;color:var(--muted);font-size:12px;padding:20px}
+</style></head><body><main class="wrap"><div class="head"><b style="letter-spacing:.18em">VELVET<span style="color:var(--pink)">.</span></b><small>your pocket space</small></div><section id="home" class="view on"><div class="hero"><div class="clock" id="clock">--:--</div><div id="date"></div><h2 id="greeting">Hey, Neo ✨</h2><small>A little space for your faith, people, plans and memories.</small></div><div class="apps"><button onclick="openView('notes')"><span>📝</span>Notes</button><button onclick="openView('gallery')"><span>🖼️</span>Gallery</button><button onclick="openView('birthdays')"><span>🎂</span>Birthdays</button><button onclick="openView('socials')"><span>🔗</span>Socials</button><button onclick="openView('project')"><span>💻</span>Project</button><button onclick="openView('focus')"><span>⏳</span>Focus</button><button onclick="openView('search')"><span>🔎</span>Search</button><button onclick="openView('settings')"><span>⚙️</span>Settings</button></div><div class="card"><b>Keep close ✦</b><p>“To dream is to dare.”</p><small>Keep showing up for the life you're building.</small></div></section>
+<section id="notes" class="view"><button class="back" onclick="openView('home')">← Home</button><div class="head"><h2>Notes & quotes</h2><button class="btn" onclick="editNote()">＋ Add</button></div><input id="noteSearch" placeholder="Search notes" oninput="renderNotes()"><div id="noteCats" class="grid2"></div><div id="noteList"></div><div id="noteEditor" class="card" style="display:none"><input id="ntitle" placeholder="Title"><select id="ncat"></select><textarea id="nbody" placeholder="Write your note"></textarea><button class="btn" onclick="saveNote()">Save note</button> <button class="btn secondary" onclick="cancelNote()">Cancel</button></div></section>
+<section id="gallery" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Gallery</h2><p class="muted">Choose a folder. Your media is public on GitHub Pages.</p><div id="folderButtons" class="grid2"></div><div id="mediaList" class="gallery"></div></section>
+<section id="birthdays" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Birthday calendar 🎂</h2><div id="birthdayList"></div><div class="card"><h3>Add birthday</h3><input id="bname" placeholder="Name"><div class="grid2"><input id="bday" type="number" min="1" max="31" placeholder="Day"><select id="bmonth"></select></div><button class="btn" onclick="addBirthday()">Add birthday</button></div></section>
+<section id="socials" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Find me online</h2><div id="socialList"></div></section>
+<section id="project" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>My work</h2><div class="card"><h3>Credit Risk Model</h3><p>Python · Machine Learning · Explainable AI</p><a class="btn" href="https://github.com/SERAKS10?tab=repositories" target="_blank" rel="noopener">Open GitHub repositories ↗</a></div></section>
+<section id="focus" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Focus time</h2><div class="card"><div class="clock" id="timer">25:00</div><button class="btn" onclick="startTimer()">Start / pause</button> <button class="btn secondary" onclick="resetTimer()">Reset</button></div></section>
+<section id="search" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Search the web</h2><input id="query" placeholder="What are you looking for?"><button class="btn" onclick="window.open('https://www.google.com/search?q='+encodeURIComponent(document.getElementById('query').value),'_blank','noopener')">Search Google ↗</button></section>
+<section id="settings" class="view"><button class="back" onclick="openView('home')">← Home</button><h2>Settings</h2><div class="card"><label>Greeting name</label><input id="gname" value="Neo"><button class="btn" onclick="localStorage.setItem('velvetName',gname.value);setGreeting()">Save greeting</button><p class="muted">New notes and added birthdays stay in this browser on this device; they do not sync automatically.</p></div></section><div class="footer">Made with intention ✦ Velvet</div></main>
 <script>
-const $=s=>document.querySelector(s);
-const lock=$('#lockScreen'),home=$('#homeScreen'),view=$('#appView');
-let activeApp='', startY=0, noteText=localStorage.getItem('velvet-note')||'Ideas, reminders, little things to remember…';
-function updateTime(){
- const d=new Date(), time=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});
- $('#clock').textContent=time;$('#statusTime').textContent=time;$('#miniTime').textContent=time;
- $('#date').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long'});
- $('#homeDate').innerHTML=d.getDate()+' <span style="font-size:17px;letter-spacing:0">'+d.toLocaleDateString('en-GB',{month:'short'}).toUpperCase()+'</span>';
- const h=d.getHours();$('#hello').textContent=h<12?'GOOD MORNING':h<17?'GOOD AFTERNOON':'GOOD EVENING';
- $('#dayLine').textContent=['Sunday','Monday'].includes(d.toLocaleDateString('en-US',{weekday:'long'}))?'Make room for what matters.':'A little progress is still progress.';
-}
-updateTime();setInterval(updateTime,15000);
-function unlock(){lock.style.transform='translateY(-105%)';lock.style.opacity='0';home.classList.add('active');}
-function showLock(){closeApp();home.classList.remove('active');lock.style.transform='';lock.style.opacity='1';}
-$('#unlockBtn').addEventListener('click',unlock);
-lock.addEventListener('touchstart',e=>startY=e.touches[0].clientY,{passive:true});
-lock.addEventListener('touchend',e=>{if(startY-e.changedTouches[0].clientY>45)unlock()},{passive:true});
-home.addEventListener('touchstart',e=>startY=e.touches[0].clientY,{passive:true});
-home.addEventListener('touchend',e=>{if(e.changedTouches[0].clientY-startY>90)showLock()},{passive:true});
-function toast(msg){const t=$('#toast');t.textContent=msg;t.classList.add('show');setTimeout(()=>t.classList.remove('show'),1900)}
-function openApp(name){
- activeApp=name;view.classList.add('open');
- const templates={
- notes:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Little notes</h2><small>A place for your thoughts</small></div></div><textarea id="noteArea" placeholder="Write something worth remembering…"></textarea><button class="save" id="saveNote">Save note</button>`,
- photos:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Gallery</h2><small>Little moments, big feelings</small></div></div><div class="photo-grid"><div class="photo">Golden hour</div><div class="photo">Soft days</div><div class="photo">Daydreams</div><div class="photo">New memories</div></div><p style="font-size:12px;color:#857791;line-height:1.6">These are sample artwork tiles. A browser simulation can't automatically access your private gallery; add photo-upload support if you'd like to use your own pictures.</p>`,
- browser:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Explore</h2><small>Where to next?</small></div></div><form class="searchbox" id="searchForm"><input id="searchInput" placeholder="Search the web…" aria-label="Search the web"><button>Go</button></form><a class="quicklink" href="https://www.google.com" target="_blank" rel="noopener"><span>◎</span><div><b>Google</b><small>Search anything</small></div></a><a class="quicklink" href="https://frvky.online/" target="_blank" rel="noopener"><span>✦</span><div><b>frvky</b><small>Your inspiration</small></div></a><a class="quicklink" href="https://www.youtube.com" target="_blank" rel="noopener"><span>▷</span><div><b>YouTube</b><small>Watch something</small></div></a>`,
- music:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Music mood</h2><small>Pick the vibe</small></div></div><div style="border-radius:24px;background:linear-gradient(140deg,#d7a8ff,#83cfc0);height:210px;display:grid;place-items:center;font-size:70px;color:#30233d">♫</div><h3>Slow mornings</h3><p style="color:#857791;font-size:13px;line-height:1.6">A little soundtrack for your day. Choose a mood below to get a search ready.</p><button class="save" data-mood="lofi">☁ Calm & focused</button><button class="save" data-mood="afrobeats" style="margin-top:8px;background:#79618d">✦ Feel-good energy</button>`,
- calendar:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Today</h2><small>Your day, gently organised</small></div></div><div class="widget" style="background:#fff;color:#30263e;border-color:#e9dff0"><div class="widget-top"><span>DATE</span><span>✦</span></div><div class="big" id="calendarDate">Today</div><div class="sub" style="color:#857791">A fresh page. Start wherever you are.</div></div><h3 style="margin-top:25px">A tiny plan</h3><label style="display:block;padding:13px 0"><input type="checkbox"> One important thing</label><label style="display:block;padding:13px 0"><input type="checkbox"> Something for future me</label><label style="display:block;padding:13px 0"><input type="checkbox"> Rest without guilt</label>`,
- focus:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Focus corner</h2><small>One thing at a time</small></div></div><div style="text-align:center;padding:24px 0"><div style="font-size:65px">◉</div><div id="timer" style="font-size:56px;letter-spacing:-2px">25:00</div><p style="color:#857791;font-size:13px">You can do more than you think.</p><button class="save" id="timerBtn">Start focus</button><button class="save" id="resetTimer" style="background:#dcd0e9;color:#38294b;margin-left:5px">Reset</button></div>`,
- links:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Shortcuts</h2><small>Your favourite places</small></div></div><a class="quicklink" href="https://calendar.google.com" target="_blank" rel="noopener"><span>▦</span><div><b>Google Calendar</b><small>Plan your time</small></div></a><a class="quicklink" href="https://drive.google.com" target="_blank" rel="noopener"><span>◫</span><div><b>Google Drive</b><small>Files and documents</small></div></a><a class="quicklink" href="https://mail.google.com" target="_blank" rel="noopener"><span>✉</span><div><b>Gmail</b><small>Open your inbox</small></div></a>`,
- settings:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Your space</h2><small>Personalise your experience</small></div></div><div class="settings-row"><div>Experience</div><span>Velvet · Android-inspired</span></div><div class="settings-row"><div>Theme</div><span>Midnight lilac</span></div><div class="settings-row"><div>Saved note</div><span id="noteStatus">On this device</span></div><div class="settings-row"><div>Privacy</div><span>Local browser storage</span></div><p style="font-size:12px;line-height:1.6;color:#857791">This is a browser-based prototype, not your phone's system lock screen. Notes are stored in this browser on this device.</p>`,
- phone:`<div class="appbar"><button class="back" data-back>‹</button><div><h2>Quick search</h2><small>Find a little something</small></div></div><form class="searchbox" id="searchForm"><input id="searchInput" placeholder="Search the web…" aria-label="Search the web"><button>Go</button></form><p style="color:#857791;font-size:13px">Your web search opens in a new tab.</p>`
- };
- view.innerHTML=templates[name]||templates.settings;
- if(name==='notes'){$('#noteArea').value=noteText;$('#saveNote').onclick=()=>{noteText=$('#noteArea').value;localStorage.setItem('velvet-note',noteText);toast('Note saved on this device ✦')}}
- if(name==='calendar')$('#calendarDate').textContent=new Date().toLocaleDateString('en-GB',{day:'numeric',month:'long'});
- view.querySelectorAll('[data-back]').forEach(b=>b.onclick=closeApp);
- const form=$('#searchForm');if(form)form.onsubmit=e=>{e.preventDefault();const q=$('#searchInput').value.trim();if(q)window.open('https://www.google.com/search?q='+encodeURIComponent(q),'_blank','noopener')};
- view.querySelectorAll('[data-mood]').forEach(b=>b.onclick=()=>window.open('https://www.youtube.com/results?search_query='+encodeURIComponent(b.dataset.mood+' playlist'),'_blank','noopener'));
- if(name==='focus')setupTimer();
-}
-let timerInt=null,seconds=1500;
-function setupTimer(){clearInterval(timerInt);timerInt=null;seconds=1500;paintTimer();$('#timerBtn').textContent='Start focus';$('#timerBtn').onclick=()=>{if(timerInt){clearInterval(timerInt);timerInt=null;$('#timerBtn').textContent='Resume focus'}else{ $('#timerBtn').textContent='Pause focus';timerInt=setInterval(()=>{seconds--;paintTimer();if(seconds<=0){clearInterval(timerInt);timerInt=null;toast('Focus session complete ✦')}},1000)}};$('#resetTimer').onclick=()=>setupTimer()}
-function paintTimer(){const el=$('#timer');if(el)el.textContent=String(Math.floor(seconds/60)).padStart(2,'0')+':'+String(seconds%60).padStart(2,'0')}
-function closeApp(){view.classList.remove('open');view.innerHTML='';activeApp='';clearInterval(timerInt);timerInt=null}
-document.querySelectorAll('[data-app]').forEach(b=>b.addEventListener('click',()=>openApp(b.dataset.app)));
-$('#navBar').addEventListener('click',()=>{if(view.classList.contains('open'))closeApp();else if(home.classList.contains('active'))showLock();else unlock()});
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){if(view.classList.contains('open'))closeApp();else showLock()}if(e.key==='ArrowUp'&&!home.classList.contains('active'))unlock()});
-if ('serviceWorker' in navigator && (location.protocol === 'https:' || location.hostname === 'localhost')) { window.addEventListener('load', () => navigator.serviceWorker.register('./sw.js').catch(() => {})); }
-</script>
-</body></html>
+const CATS=['Motivation Quotes','My 5-Year Plan','Bible Quotes','Movies/Series Quotes','Personal'];
+const seed=[['To dream is to dare.','Motivation Quotes','To dream is to dare.'],['Our deepest fear','Motivation Quotes','Our deepest fear is not that we are inadequate. Our deepest fear is that we are powerful beyond measure. Who are you not to be brilliant, gorgeous, talented, fabulous? We were born to make manifest the glory of God within us.'],['You miss 100% of shots','Motivation Quotes','You miss 100% of shots you do not take.'],['My 5-Year Plan','My 5-Year Plan','Grew closer to the Lord.\nBecame a better version of myself.\nMore consistent at the gym.\nRegistered with a professional body.\nAcquired that postgrad.\nSpent more time with loved ones.\nTravelled to a different continent.\nMarried/Engaged 💍 😁'],['Jeremiah 29:11','Bible Quotes','For I know the plans I have for you, plans to prosper you and not to harm you, plans to give you hope and a future.'],['Romans 4:7','Bible Quotes','Blessed are those whose transgressions are forgiven, whose sins are covered.'],['Matthew 22:37','Bible Quotes','Love the Lord your God with all your heart and with all your soul and with all your mind.'],['1 John 4:19','Bible Quotes','We love because He first loved us.'],['1 Corinthians 13:4','Bible Quotes','Love is patient, love is kind, it does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres.'],['1 John 4:16','Bible Quotes','God is love. Whoever lives in love lives in God, and God in them.'],['Matthew 22:37','Bible Quotes','Love the Lord your God with all your heart and with all your soul and with all your mind.'],['1 John 4:19','Bible Quotes','We love because He first loved us.'],['1 Corinthians 13:4','Bible Quotes','Love is patient, love is kind, it does not envy, it does not boast, it is not proud. It always protects, always trusts, always hopes, always perseveres.'],['1 John 4:16','Bible Quotes','God is love. Whoever lives in love lives in God, and God in them.'],['Twilight: Breaking Dawn','Movies/Series Quotes','It is an extraordinary thing to meet someone who you can bare your soul to. And who will accept you for who you are. I have been waiting, what seems a very long time to get beyond what I am. And with you, I feel like I can finally begin. So I would like to propose a toast to my beautiful bride. <b>No measure of time with you will be long enough. But let us start with forever.</b>']];
+let notes=JSON.parse(localStorage.getItem('velvetNotes')||'null')||seed.map((x,i)=>({id:i+1,title:x[0],category:x[1],body:x[2]}));let editing=null,filter='All';
+const months=['January','February','March','April','May','June','July','August','September','October','November','December'];
+let birthdays=[['Motherhood',8,9],['Fatherhood',4,9],['Lil Sister',6,3],['Daughter',7,2],['Son',5,6],['Son',12,7],['Kelebogile',18,6],['Rethabile',1,6],['Segomotso',8,4],['Thato',7,1],['Kagiso Marumo',21,0],['Kgosi (King)',30,3],['Owageng',8,4],['Mamase',1,0],['Omolemo',26,8],['Reatlegile',13,3]];
+const extra=JSON.parse(localStorage.getItem('velvetBirthdays')||'[]');birthdays=birthdays.concat(extra);
+function openView(id){document.querySelectorAll('.view').forEach(v=>v.classList.remove('on'));document.getElementById(id).classList.add('on');if(id==='notes')renderNotes();if(id==='gallery')renderGallery('All');if(id==='birthdays')renderBirthdays();if(id==='socials')renderSocials();}
+function esc(s){return String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));}
+function renderNotes(){document.getElementById('noteCats').innerHTML=['All',...CATS].map(c=>`<button class="btn ${filter===c?'':'secondary'}" onclick="filter='${c}';renderNotes()">${esc(c)}</button>`).join('');let q=(document.getElementById('noteSearch').value||'').toLowerCase();let arr=notes.filter(n=>(filter==='All'||n.category===filter)&&(`${n.title} ${n.body} ${n.category}`).toLowerCase().includes(q));document.getElementById('noteList').innerHTML=arr.map(n=>`<div class="entry"><b>${esc(n.title)}</b><br><small>${esc(n.category)}</small><p>${n.category==='Movies/Series Quotes'?n.body:esc(n.body).replace(/\n/g,'<br>')}</p><button class="btn" onclick="editNote(${n.id})">Edit</button><button class="btn secondary" onclick="deleteNote(${n.id})">Delete</button></div>`).join('')||'<p class="muted">No notes found.</p>';}
+function editNote(id){editing=id||null;let n=notes.find(x=>x.id===id);document.getElementById('noteEditor').style.display='block';document.getElementById('ntitle').value=n?.title||'';document.getElementById('nbody').value=n?.body||'';document.getElementById('ncat').innerHTML=CATS.map(c=>`<option ${n?.category===c?'selected':''}>${c}</option>`).join('');}
+function saveNote(){let title=document.getElementById('ntitle').value.trim(),body=document.getElementById('nbody').value,category=document.getElementById('ncat').value;if(!title||!body.trim()){alert('Please add a title and note.');return}if(editing){notes=notes.map(n=>n.id===editing?{...n,title,body,category}:n)}else notes.unshift({id:Date.now(),title,body,category});localStorage.setItem('velvetNotes',JSON.stringify(notes));cancelNote();renderNotes()}
+function cancelNote(){document.getElementById('noteEditor').style.display='none';editing=null}function deleteNote(id){if(confirm('Delete this note?')){notes=notes.filter(n=>n.id!==id);localStorage.setItem('velvetNotes',JSON.stringify(notes));renderNotes()}}
+const mediaFiles=["1916.mov", "1787.jpg", "1968.heic", "1981.jpg", "167434.jpg", "1802.jpg", "131797.mp4", "1962.heic", "127377.heic", "137022.jpg", "127379.heic", "1925.jpg", "127384.png", "118388.jpg", "214329.jpg", "bcdf3dfd-0431-42da-8908-562b3993ad34-1_all_1631.jpg", "95061.jpg", "151744.jpg", "92202.jpg", "bcdf3dfd-0431-42da-8908-562b3993ad34-1_all_3555.jpg", "234575.jpg", "167437.jpg", "1735.jpg", "1944.png", "19094.jpg", "1790.jpg", "136804.jpg", "29124.mp4", "1700.jpg", "167441.jpg", "1696.jpg"];
+const folderMap={Family:mediaFiles.slice(0,9),Friends:mediaFiles.slice(9,15),Memories:mediaFiles.slice(15,23),Favourites:mediaFiles.slice(23)};
+function renderGallery(folder){document.getElementById('folderButtons').innerHTML=['Family','Friends','Memories','Favourites'].map(f=>`<button class="btn ${folder===f?'':'secondary'}" onclick="renderGallery('${f}')">${f}</button>`).join('');let files=folder==='All'?mediaFiles:folderMap[folder]||[];document.getElementById('mediaList').innerHTML=files.map(f=>{let url='assets/media/'+encodeURIComponent(f),ext=f.split('.').pop().toLowerCase();let media=['mp4','mov','webm'].includes(ext)?`<video class="media" controls preload="metadata" src="${url}"></video>`:['heic','heif'].includes(ext)?`<div class="media" style="display:grid;place-items:center;padding:10px;text-align:center">📷<br>HEIC image<br><small>Browser may not preview this format</small></div>`:`<img class="media" loading="lazy" src="${url}" alt="Gallery memory">`;return `<div class="tile">${media}<small>${esc(f)}</small></div>`}).join('')||'<p>No media found.</p>';}
+function renderBirthdays(){document.getElementById('bmonth').innerHTML=months.map((m,i)=>`<option value="${i}">${m}</option>`).join('');let sorted=[...birthdays].sort((a,b)=>a[2]-b[2]||a[1]-b[1]);document.getElementById('birthdayList').innerHTML=sorted.map((b,i)=>`<div class="entry"><b>${esc(b[0])}</b><br>${String(b[1]).padStart(2,'0')} ${months[b[2]]}<button class="btn secondary" onclick="removeBirthday(${i})" style="float:right">Remove</button></div>`).join('');let now=new Date(),future=sorted.map(b=>({...b,next:new Date(now.getFullYear(),b[2],b[1])})).map(b=>b.next<new Date(now.getFullYear(),now.getMonth(),now.getDate())?{...b,next:new Date(now.getFullYear()+1,b[2],b[1])}:b).sort((a,b)=>a.next-b.next)[0];document.getElementById('nextBirthday').textContent=future?`${future[0]} — ${future.next.toLocaleDateString('en-GB',{day:'numeric',month:'long'})}`:'';}
+function addBirthday(){let n=document.getElementById('bname').value.trim(),d=+document.getElementById('bday').value,m=+document.getElementById('bmonth').value;if(!n||d<1||d>31){alert('Enter a name and valid day.');return}let b=[n,d,m];birthdays.push(b);let extras=birthdays.slice(16);localStorage.setItem('velvetBirthdays',JSON.stringify(extras));document.getElementById('bname').value='';document.getElementById('bday').value='';renderBirthdays()}
+function removeBirthday(i){if(i<16){alert('The original birthday list is built into the site. You can add birthdays, but deleting a starter birthday requires editing the project files.');return}birthdays.splice(i,1);localStorage.setItem('velvetBirthdays',JSON.stringify(birthdays.slice(16)));renderBirthdays()}
+function renderSocials(){document.getElementById('socialList').innerHTML=[['X','@NSeraks','https://x.com/NSeraks'],['LinkedIn','Neo Mothibi','https://linkedin.com/in/neo-mothibi-8905272b2'],['Facebook','MansNotSer','https://www.facebook.com/MansNotSer'],['TikTok','@seraks10','https://www.tiktok.com/@seraks10']].map(x=>`<a class="entry" style="display:block;color:inherit;text-decoration:none" href="${x[2]}" target="_blank" rel="noopener"><b>${x[0]}</b><br><small>${x[1]}</small> ↗</a>`).join('')}
+function setGreeting(){let n=localStorage.getItem('velvetName')||'Neo';document.getElementById('greeting').textContent='Hey, '+n+' ✨';document.getElementById('gname').value=n}
+function tick(){let d=new Date();document.getElementById('clock').textContent=d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit',hour12:false});document.getElementById('date').textContent=d.toLocaleDateString('en-GB',{weekday:'long',day:'numeric',month:'long',year:'numeric'})}tick();setInterval(tick,15000);setGreeting();renderGallery('All');renderBirthdays();
+if('serviceWorker' in navigator && (location.protocol==='https:'||location.hostname==='localhost')){window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js').catch(()=>{}))}
+let timerSecs=1500,timerId=null;function paintTimer(){document.getElementById('timer').textContent=String(Math.floor(timerSecs/60)).padStart(2,'0')+':'+String(timerSecs%60).padStart(2,'0')}function startTimer(){if(timerId){clearInterval(timerId);timerId=null;return}timerId=setInterval(()=>{timerSecs=Math.max(0,timerSecs-1);paintTimer();if(!timerSecs){clearInterval(timerId);timerId=null;alert('Focus session complete!')}},1000)}function resetTimer(){clearInterval(timerId);timerId=null;timerSecs=1500;paintTimer()}
+</script></body></html>

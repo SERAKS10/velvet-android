@@ -1,24 +1,20 @@
-# Velvet — Android-inspired PWA
+# Velvet — GitHub Pages build
 
-Velvet is a browser-based phone simulation with an original midnight-lilac and mint design. This package is prepared as a Progressive Web App (PWA).
+## Included
+- Live clock/date, graduation photo background, greeting
+- Notes categories: Motivation Quotes, My 5-Year Plan, Bible Quotes, Movies/Series Quotes, Personal
+- Add, edit, delete and search notes
+- Birthday list with the supplied 16 birthdays and an add-birthday form
+- Gallery with Family, Friends, Memories and Favourites folder filters
+- X, LinkedIn, Facebook and TikTok links
+- Credit Risk Model GitHub card, focus timer, web search and settings
+- PWA manifest and service worker
 
-## Files
-- `index.html` — app interface
-- `manifest.webmanifest` — install name, icon and standalone display settings
-- `sw.js` — service worker for offline caching
-- `icons/velvet.svg` — app icon
+## Important privacy note
+You chose to make your photos and videos public. The media files in `assets/media/` and the graduation photo in `assets/lockscreen/` are included in this project. Anyone who can access a public GitHub Pages site may view or download them. HEIC images are included as uploaded but many browsers do not preview HEIC; convert them to JPG if you want universal browser support.
 
-## Install on Android
-1. Upload the contents of this folder to a static web host that serves HTTPS (for example, GitHub Pages, Netlify, or Cloudflare Pages).
-2. Open the deployed HTTPS URL in Chrome on your Android phone.
-3. Open Chrome's ⋮ menu and choose **Install app** or **Add to Home screen**.
-4. Launch Velvet from the new home-screen icon.
+## Data behaviour
+Notes and birthdays you add are stored in the current browser's local storage. They do not sync between devices. The starter notes and birthday names are in `index.html` and therefore visible in the public repository source.
 
-## Important
-- A PWA must be served from HTTPS (or localhost) for service-worker/offline support. Opening `index.html` directly from a file manager does not provide the full install/offline experience.
-- The browser simulation cannot replace Android's system lock screen or read private photos automatically.
-- Notes are saved in local browser storage on the device.
-- This project has been prepared for deployment, but it has **not** been uploaded or hosted online by this package-generation step.
-
-## Customise
-Edit the CSS variables in `index.html` to change colours, and edit the `templates` object to customise the mini-app screens.
+## Deploy
+Upload the *contents* of this folder to the root of your existing `velvet-android` GitHub repository, replacing the existing `index.html`, and add/replace `manifest.webmanifest`, `sw.js`, and the `assets` folder. Do not upload only the ZIP file. In GitHub Pages, the source should remain the repository branch/root already used by your working site.
